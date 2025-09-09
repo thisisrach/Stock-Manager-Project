@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Customers</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+    .oracle-header {
+      background: #fff;
+      padding: 20px 40px 12px 40px;
+      font-size: 20px;
+      letter-spacing: 1px;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 56px;
+    }
+    /* Customize your navbar here */
+    .oracle-header .logo { font-weight: bold; color: #2c3e50; }
+    .oracle-header .nav {
+      display: flex; gap: 22px; align-items: center;
+      font-size: 18px;
+    }
+    .oracle-header .nav a {
+      color: #2c3e50;
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 7px;
+      transition: background .2s;
+    }
+    .oracle-header .nav a.selected, .oracle-header .nav a:focus {
+      background: #dcd6f7;
+      color:#4b359d;
+    }
+    .main-content {
+      margin: 40px auto;
+      max-width: 1120px;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .container-card {
+      width: 100%;
+      max-width: 1000px;
+      min-height: 660px;
+      background: #fff;
+      padding: 38px 32px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.11);
+      animation: fadeIn 0.7s cubic-bezier(.46,.03,.52,.96);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 32px;
+      color: #2c3e50;
+      font-weight: 700;
+    }
+    .action-buttons {
+      display: flex;
+      gap: 22px;
+      margin-bottom: 29px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .oj-button {
+      padding: 9px 18px;
+      border: none;
+      border-radius: 9px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 16px;
+      transition: all 0.16s;
+      margin-right: 6px;
+    }
+    .oj-button-primary { background: linear-gradient(135deg,#667eea,#764ba2); color:#fff; }
+    .oj-button-primary:hover { background: linear-gradient(135deg,#5a67d8,#6b46c1); }
+    .oj-button-danger { background: #e74c3c; color:#fff; }
+    .oj-button-danger:hover { background: #c0392b; }
+    .oj-button-info { background: #3498db; color:#fff; }
+    .oj-button-info:hover { background:#2980b9; }
+    .oj-button-outlined-chrome {
+      background: #f0f3f8; border: 1px solid #c0c8e2; color:#555;
+    }
+    .oj-button-outlined-chrome:hover { background:#e2e2ef ; }
+    /* Card form style */
+    .form-block {
+      width: 100%; max-width: 540px;
+      margin: 0 auto 30px auto;
+      padding: 24px 32px 18px 32px;
+      border-radius: 13px;
+      background: #f7f7fa;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .form-block h2 { margin-bottom: 15px; }
+    label { display: block; margin-bottom:9px; font-weight: 500; color: #444; }
+    input {
+      width: 100%; padding: 10px;
+      border-radius: 6px; border: 1px solid #ccc;
+      margin-bottom: 15px;
+      transition: border .19s;
+      box-sizing: border-box;
+    }
+    input:focus { border-color: #667eea; outline: none; }
+    table { width: 100%; border-collapse: collapse; margin-top:20px; font-size: 16px; }
+    th, td { padding:12px 8px; text-align: center;}
+    th { background: #2c3e50; color: #fff; font-size: 17px;}
+    tr:nth-child(even) { background: #f2f4fa; }
+    .modal-report {
+
+  margin: 0 auto 0 auto; 
+  width: 97%;
+  max-width: 750px;
+  min-height: 350px;
+  border-radius: 18px;
+  background: #f8fafd;
+  box-shadow: 0 10px 22px rgba(0,0,0,0.13);
+  padding: 35px 38px 26px 38px;
+  text-align: center;
+}
+    .modal-report h2 {
+      text-align: left;
+      font-size: 27px;
+      font-weight: bold;
+      color: #2c3e50;
+      margin-bottom: 30px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .modal-report .oj-button-danger {
+      font-size: 16px; padding:9px 18px;
+    }
+    .modal-report table {
+      border: 1.5px solid #b8bedd;
+      border-radius: 9px;
+      background: #fff;
+      margin: 0 auto 16px auto;
+      box-shadow: 0 4px 13px rgba(52,73,94,0.03);
+      min-width: 73%;
+      font-size: 16px;
+    }
+    .modal-report th, .modal-report td { padding:10px 8px;}
+    .summary-field { margin: 13px 0 9px 0; font-size: 1.14em; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+  
+  <div class="main-content">
+  <div class="container-card">
+    <h1>Customers</h1>
+    <!-- ko ifnot: showReports -->
+    <div class="action-buttons">
+      <button class="oj-button oj-button-primary" data-bind="click: showAddCustomerForm">➕ Add Customer</button>
+      <button class="oj-button oj-button-outlined-chrome" data-bind="click: listCustomer">📋 List Customers</button>
+      <button class="oj-button oj-button-info" data-bind="click: showCustomerReports">📊 Show Reports</button>
+    </div>
+    <!-- Add Customer Form -->
+    <!-- ko if: addFormVisible -->
+    <div class="form-block">
+      <h2 style="color:#27ae60;">Add Customer</h2>
+      <form data-bind="submit: addCustomer">
+        <label>Name <input type="text" data-bind="value: newCustName" required></label>
+        <label>Phone <input type="text" data-bind="value: newCustPhone" required></label>
+        <label>Email <input type="email" data-bind="value: newCustEmail" required></label>
+        <label>Address <input type="text" data-bind="value: newCustAddress" required></label>
+        <div style="display:flex; justify-content:center; gap:15px; margin-top:12px;">
+          <button type="submit" class="oj-button oj-button-primary">💾 Save</button>
+          <button type="button" class="oj-button oj-button-danger" data-bind="click: function(){ addFormVisible(false) }">❌ Cancel</button>
+        </div>
+      </form>
+    </div>
+    <!-- /ko -->
+    <!-- Update Customer Form -->
+    <!-- ko if: updateFormVisible -->
+    <div class="form-block" style="background:#fff3cd;">
+      <h2 style="color:#856404;">Update Customer</h2>
+      <form data-bind="submit: updateCustomer">
+        <label>Name <input type="text" data-bind="value: newCustName" required></label>
+        <label>Phone <input type="text" data-bind="value: newCustPhone" required></label>
+        <label>Email <input type="email" data-bind="value: newCustEmail" required></label>
+        <label>Address <input type="text" data-bind="value: newCustAddress" required></label>
+        <div style="display:flex; justify-content:center; gap:15px; margin-top:12px;">
+          <button type="submit" class="oj-button oj-button-primary">🔄 Update</button>
+          <button type="button" class="oj-button oj-button-danger" data-bind="click: function(){ updateFormVisible(false) }">❌ Cancel</button>
+        </div>
+      </form>
+    </div>
+    <!-- /ko -->
+    <!-- ko if: tableVisible -->
+    <div style="width:100%; margin-top:20px;">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody data-bind="foreach: customerList">
+          <tr>
+            <td data-bind="text: custId"></td>
+            <td data-bind="text: custName"></td>
+            <td data-bind="text: phoneNo"></td>
+            <td data-bind="text: email"></td>
+            <td data-bind="text: address"></td>
+            <td>
+              <button class="oj-button oj-button-outlined-chrome" data-bind="click: $parent.startUpdateCustomerRow">✏️ Update</button>
+              <button class="oj-button oj-button-danger" data-bind="click: $parent.deleteCustomerRow">🗑 Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- /ko -->
+    <!-- /ko -->
+    <!-- REPORTS MODAL/SECTION (toggle) -->
+    <div data-bind="visible: showReports" class="modal-report">
+      <h2>
+        Customer Asset Reports
+        <button class="oj-button oj-button-danger" style="float:right;" data-bind="click: hideCustomerReports">Close</button>
+      </h2>
+        
+      <table style="width:90%;margin: 0 auto 20px auto; border-radius: 12px;" border="1" data-bind="foreach: customerAssets">
+        <tr>
+          <td style="font-size:15.7px;" data-bind="text: custName"></td>
+          <td style="font-size:15.7px;" data-bind="text: asset"></td>
+        </tr>
+      </table>
+      <div class="summary-field">
+        <strong>Richest Customer:</strong>
+        <span data-bind="text: richestCustomer() && richestCustomer().custName ? richestCustomer().custName : '-'"></span>
+        (<span data-bind="text: richestCustomer() && richestCustomer().asset ? richestCustomer().asset : '-'"></span>)
+      </div>
+      <div class="summary-field">
+        <strong>Poorest Customer:</strong>
+        <span data-bind="text: poorestCustomer() && poorestCustomer().custName ? poorestCustomer().custName : '-'"></span>
+        (<span data-bind="text: poorestCustomer() && poorestCustomer().asset ? poorestCustomer().asset : '-'"></span>)
+      </div>
+      <div class="summary-field">
+        <strong>Total Assets of All Customers:</strong>
+        <span data-bind="text: totalAssets"></span>
+      </div>
+    </div>
+  </div>
+  </div>
+</body>
+</html>

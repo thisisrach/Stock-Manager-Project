@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login / Register</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-min.js"></script>
+  <style>
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px; /
+}
+
+.form-block {
+  width: 380px;
+  padding: 32px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: 24px;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      margin-bottom: 12px;
+      font-weight: 500;
+      color: #444;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      outline: none;
+      transition: border 0.3s ease;
+    }
+
+    input:focus, select:focus {
+      border-color: #667eea;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 16px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.3s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #5a67d8, #6b46c1);
+    }
+
+    .switch-btn {
+      margin-top: 12px;
+      background: transparent;
+      border: none;
+      color: #667eea;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .message {
+      margin-top: 10px;
+      min-height: 18px;
+      font-size: 14px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-content">
+<div class="form-block">
+  <!-- Login Form -->
+  <div data-bind="visible: !showRegister()">
+    <h2>Welcome Back 👋</h2>
+    <form data-bind="submit: login">
+      <label>Username:
+        <input type="text" data-bind="value: username" required>
+      </label>
+      <label>Password:
+        <input type="password" data-bind="value: password" required>
+      </label>
+      <button type="submit">Login</button>
+    </form>
+    <div class="message" data-bind="text: message" style="color:red;"></div>
+    <button class="switch-btn" type="button" data-bind="click: showRegisterForm">
+      Don't have an account? Register
+    </button>
+  </div>
+
+  <!-- Register Form -->
+  <div data-bind="visible: showRegister">
+    <h2>Create Account ✨</h2>
+    <form data-bind="submit: registerUser">
+      <label>Username:
+        <input type="text" data-bind="value: regUsername" required>
+      </label>
+      <label>Password:
+        <input type="password" data-bind="value: regPassword" required>
+      </label>
+      <label>Role:
+        <select data-bind="value: regRole" required>
+          <option value="CUSTOMER">Customer</option>
+          <option value="ADMIN">Admin</option>
+        </select>
+      </label>
+      <!-- ko if: regRole() === 'CUSTOMER' -->
+      <label>Phone:
+        <input type="text" data-bind="value: regPhone">
+      </label>
+      <label>Email:
+        <input type="email" data-bind="value: regEmail">
+      </label>
+      <label>Address:
+        <input type="text" data-bind="value: regAddress">
+      </label>
+      <!-- /ko -->
+      <button type="submit">Register</button>
+    </form>
+    <div class="message" data-bind="text: regMessage" style="color:green;"></div>
+    <button class="switch-btn" type="button" data-bind="click: showLoginForm">
+      Already have an account? Login
+    </button>
+  </div>
+</div>
+
+<script src="login.js"></script>
+</body>
+</html>

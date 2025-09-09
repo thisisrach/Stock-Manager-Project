@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>About Stock Manager Project</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+    .about-container {
+      margin: 45px auto;
+      max-width: 900px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 9px 29px rgba(90,90,130,0.12);
+      padding: 38px 42px 38px 42px;
+      animation: fadeIn 0.7s cubic-bezier(.46,.03,.52,.96);
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.5em;
+      margin-bottom: 32px;
+      color: #2c3e50;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    h2 {
+      font-size: 1.45em;
+      color: #393e87;
+      margin-top: 34px;
+      margin-bottom: 14px;
+    }
+    em {
+      font-style: normal;
+      font-weight: 700;
+      color: #7d459a;
+      font-size: 1.14em;
+      display: block;
+      margin-top: 25px;
+      margin-bottom: 4px;
+    }
+    ul, ol {
+      margin: 15px 0 22px 22px;
+      line-height: 1.74;
+    }
+    ol { font-size: 1.09em; color: #253266;}
+    li { margin-bottom: 7px;}
+    p, div, ul, ol {
+      font-size: 1.11em;
+      color: #2d3250;
+    }
+    .card-feature {
+      background: #f9fafd;
+      border-radius: 12px;
+      padding: 18px 24px;
+      margin-bottom: 19px;
+      box-shadow: 0 3px 11px #babcff15;
+    }
+    .feature-list {
+      margin: 4px 0 15px 18px; padding-left: 16px;
+      color: #3f448c;
+    }
+    .about-section-title {
+      font-weight: bold;
+      color: #4d3990;
+      margin-top: 23px;
+      margin-bottom: 0px;
+    }
+    @keyframes fadeIn { from {opacity:0;transform:translateY(15px);} to {opacity:1;transform:translateY(0);} }
+    @media (max-width: 600px) {
+      .about-container { padding: 11vw 4vw; }
+      h1 { font-size: 2em; }
+    }
+  </style>
+</head>
+<body>
+<div class="about-container">
+  <h1>About Stock Manager Project</h1>
+  <p>
+    <strong>Stock Manager</strong> is a robust Java-based application developed to efficiently manage stock inventories and customer data within a simplified interface.
+    The system provides core functionalities such as adding, updating, and removing stocks, handling customer information, and facilitating stock transactions including purchases and sales. Designed with maintainability and scalability in mind, Stock Manager leverages Oracle database integration for persistent data storage, ensuring data integrity across sessions.
+  </p>
+
+  <h2>Key Features</h2>
+
+  <div class="card-feature">
+    <em>Stock Management</em>
+    <ul class="feature-list">
+      <li><strong>Add New Stock:</strong> Users can add new stocks by specifying key details such as the stock name, symbol, price, and quantity.</li>
+      <li><strong>Remove Stock:</strong> Enables the deletion of stock entries based on their unique symbol.</li>
+      <li><strong>Update Stock:</strong> Allows modification of existing stock records, including changes to stock price and available quantity.</li>
+      <li><strong>Retrieve Stock:</strong> Retrieves existing stock records.</li>
+    </ul>
+    <em>Customer Management</em>
+    <ul class="feature-list">
+      <li><strong>Add New Customer:</strong> Users can register new customers by entering details such as name, customer ID, and email address.</li>
+      <li><strong>Remove Customer:</strong> Provides functionality to delete a customer profile using their unique customer ID.</li>
+      <li><strong>Update Customer:</strong> Allows modification of existing customer records.</li>
+      <li><strong>Retrieve Customer:</strong> Retrieves existing customer records.</li>
+    </ul>
+    <em>Stock Transactions</em>
+    <ul class="feature-list">
+      <li><strong>Purchase Stocks:</strong> Customers can buy stocks from the system. The purchase updates the stock quantity in the inventory and logs the transaction in the customer’s history.</li>
+      <li><strong>Sell Stocks:</strong> Allows customers to sell previously purchased stocks. The transaction adjusts the stock quantity accordingly and records the sale in the customer's history.</li>
+    </ul>
+    <em>Data Persistence & Technology</em>
+    <ul class="feature-list">
+      <li><strong>Database Integration:</strong> Employs Oracle database tables for persistent storage of stock and customer information.</li>
+      <li><strong>Technologies Used:</strong>
+        <ul>
+          <li><strong>Programming Language:</strong> Java 17, Spring Boot 3.5.5</li>
+          <li><strong>Server:</strong> Apache Tomcat 10</li>
+          <li><strong>Database:</strong> Oracle 19c</li>
+          <li><strong>Architecture:</strong> Object-Oriented Design</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <h2 class="about-section-title">Optional Reports (Your app can generate):</h2>
+  <ol>
+    <li>List of customers, stock details, and their total assets including the txn type</li>
+    <li>List the customer whose asset value is the maximum</li>
+    <li>List the customer whose asset value is the minimum</li>
+    <li>List the stock name transacted most number of times</li>
+    <li>List the stock name transacted least number of times</li>
+    <li>Stock with the highest price</li>
+    <li>List all stock details</li>
+    <li>List all customer details</li>
+    <li>List all transaction details</li>
+    <li>Which txn is more (buy or sell)</li>
+    <li>Total assets of all customers</li>
+  </ol>
+</div>
+</body>
+</html>

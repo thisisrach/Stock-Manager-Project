@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Transaction History</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2); /* new gradient */
+  margin: 0;
+  padding: 20px;
+}
+
+    .txn-container {
+      max-width: 1000px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .txn-title {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2c3e50;
+    }
+
+    .txn-actions {
+      text-align: right;
+      margin-bottom: 15px;
+    }
+
+    .btn {
+      padding: 6px 14px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: white;
+      font-weight: bold;
+    }
+
+    .btn-purple { background: #8e44ad; }
+    .btn-green { background: #27ae60; margin-left: 10px; }
+    .btn-info { background: #2980b9; margin-left: 10px; }
+    .btn-red { background: #e74c3c; }
+
+    .btn:hover {
+      opacity: 0.85;
+    }
+
+    .float-right {
+      float: right;
+    }
+
+    .txn-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .txn-table thead {
+      background: #8e44ad;
+      color: white;
+    }
+
+    .txn-table th,
+    .txn-table td {
+      padding: 10px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .txn-summary {
+      margin-top: 15px;
+      padding: 10px;
+      background: #ecf0f1;
+      border-radius: 5px;
+    }
+
+    .reports-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;  /* 👈 align toward top */
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  padding-top: 70px;        /* 👈 adjust to move card down from nav */
+}
+.reports-card {
+  background: #fff;
+  padding: 30px 40px;
+  border-radius: 15px;
+  box-shadow: 0px 10px 25px rgba(0,0,0,0.15);
+  text-align: center;
+  width: 100%;
+  max-width: 700px;
+  margin: 0;
+  /* Add animation for a nice effect */
+  transform: translateY(20px);
+  animation: slideUp 0.7s cubic-bezier(.23,1.08,.6,.97);
+}
+@keyframes slideUp {
+  0% { opacity: 0; transform: translateY(100px);}
+  100% { opacity: 1; transform: translateY(20px);}
+}
+    .reports-card h2 {
+      margin-bottom: 20px;
+      font-size: 28px;
+      font-weight: 700;
+      color: #2c3e50;
+    }
+  </style>
+</head>
+<body>
+  <div class="txn-container" data-bind="visible: !showReports()">
+    <h2 class="txn-title">📑 Transaction History</h2>
+
+    <div class="txn-actions">
+      <button data-bind="click: loadTransactions" class="btn btn-purple">Refresh</button>
+      <button data-bind="click: exportCSV" class="btn btn-green">Export CSV</button>
+      <button data-bind="click: showTxnReports" class="btn btn-info">📊 Show Reports</button>
+    </div>
+
+    <table class="txn-table">
+      <thead>
+        <tr>
+          <th>Txn ID</th>
+          <th>Customer</th>
+          <th>Stock</th>
+          <th>Type</th>
+          <th>Quantity</th>
+          <th>Price/Share</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody data-bind="foreach: transactionList">
+        <tr>
+          <td data-bind="text: txnId"></td>
+          <td data-bind="text: customer && customer.custName ? customer.custName : ''"></td>
+          <td data-bind="text: stock && stock.stockName ? stock.stockName : ''"></td>
+          <td data-bind="text: txnType"></td>
+          <td data-bind="text: quantity"></td>
+          <td data-bind="text: txnPrice"></td>
+          <td data-bind="text: txnDate"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    
+  </div>
+
+  <!-- Report Section -->
+  <div data-bind="visible: showReports" class="reports-container">
+    <div class="reports-card">
+      <h2>📊 Transactions Reports</h2>
+      <p><strong>Transaction Type With Most Occurrences:</strong>
+        <span data-bind="text: moreTxnType"></span>
+      </p>
+      <button class="btn btn-red" data-bind="click: hideTxnReports">Close</button>
+    </div>
+  </div>
+</body>
+</html>

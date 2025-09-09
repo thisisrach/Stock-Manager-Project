@@ -1,0 +1,188 @@
+<div class="dashboard-bg">
+  <h1 class="dashboard-welcome">Welcome, <span data-bind="text: username"></span>!</h1>
+  <div class="top-row">
+    <div class="summary-card">
+      <h2>Account Summary</h2>
+      <ul>
+        <li><b>Total Stocks Owned:</b>
+          <span data-bind="text: accountSummary().totalStocks"></span>
+        </li>
+        <li><b>Last Transaction Date:</b>
+          <span data-bind="text: accountSummary().lastTransaction"></span>
+        </li>
+        <li><b>Portfolio Value:</b>
+          $<span data-bind="text: accountSummary().portfolioValue"></span>
+        </li>
+      </ul>
+    </div>
+    <div class="holdings-card">
+      <h2>My Holdings</h2>
+      <table>
+        <thead>
+        <tr>
+          <th>Stock</th>
+          <th>Quantity</th>
+          <th>Current Price</th>
+          <th>Value</th>
+        </tr>
+        </thead>
+        <tbody data-bind="foreach: accountSummary().holdings">
+        <tr>
+          <td data-bind="text: stock"></td>
+          <td data-bind="text: quantity"></td>
+          <td data-bind="text: currentPrice"></td>
+          <td data-bind="text: value"></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="transactions-card">
+    <h2>Recent Transactions</h2>
+    <table>
+      <thead>
+      <tr>
+        <th>Stock</th>
+        <th>Action</th>
+        <th>Quantity</th>
+        <th>Date</th>
+      </tr>
+      </thead>
+      <tbody data-bind="foreach: transactions">
+      <tr>
+        <td data-bind="text: stock"></td>
+        <td data-bind="text: action"></td>
+        <td data-bind="text: quantity"></td>
+        <td data-bind="text: date"></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<style>
+  .dashboard-bg {
+    min-height: 100vh;
+    background: #fcf9f8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 0 60px 0;
+  }
+  .dashboard-welcome {
+    margin-top: 40px;
+    text-align: center;
+    color: #322a38;
+    font-weight: 700;
+    font-size: 2.2em;
+    margin-bottom: 38px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    letter-spacing: .5px;
+  }
+  .top-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 38px;
+    width: 100%;
+    margin-bottom: 40px;
+  }
+  .summary-card {
+    flex: 1 1 300px;
+    background: #e4faf1;
+    padding: 28px 34px;
+    border-radius: 18px;
+    min-width: 285px;
+    max-width: 380px;
+    box-shadow: 0 4px 20px #1ab0ac11;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  .summary-card h2 {
+    color: #166642;
+    font-size: 1.31em;
+    font-weight: 700;
+    margin-bottom: 13px;
+    margin-top: 0;
+  }
+  .summary-card ul {
+    list-style: none;
+    margin: 0; padding: 0;
+    font-size: 1.1em;
+    color: #233;
+    letter-spacing: .13px;
+  }
+  .summary-card li { margin-bottom: 8px; }
+  .holdings-card {
+    flex: 1 1 330px;
+    background: #fff0f0;
+    padding: 24px 22px 17px 22px;
+    border-radius: 18px;
+    min-width: 285px;
+    max-width: 390px;
+    box-shadow: 0 6px 18px #e55a5a13;
+  }
+  .holdings-card h2 {
+    color: #a2422a;
+    font-size: 1.1em;
+    font-weight: 700;
+    margin-bottom: 13px;
+    margin-top: 0;
+  }
+  .holdings-card table {
+    width:100%; border-collapse:collapse;
+    background: #fff;
+    border-radius: 7px;
+    overflow: hidden;
+    font-size: 15px;
+    box-shadow: 0 2px 8px #a99b9b15;
+  }
+  .holdings-card th, .holdings-card td {
+    padding: 10px 7px; text-align: center;
+  }
+  .holdings-card th {
+    background: #ffdada;
+    color: #7b2a1a;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .holdings-card tr:nth-child(even) { background: #fff5f5; }
+
+  .transactions-card {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto 29px auto;
+    background: #f7f9ff;
+    padding: 23px 23px 15px 23px;
+    border-radius: 15px;
+    box-shadow: 0 3px 11px #145aa11b;
+  }
+  .transactions-card h2 {
+    color: #1869a0;
+    font-size: 1.2em;
+    font-weight: 700;
+    margin-bottom: 13px; margin-top: 0;
+    letter-spacing: .6px;
+  }
+  .transactions-card table {
+    width:100%; border-collapse:collapse; font-size: 15px;
+    background: #fff;
+    border-radius:7px;
+    overflow:hidden;
+    box-shadow: 0 2px 9px #cccccc18;
+  }
+  .transactions-card th {
+    background: #d6e0fc;
+    color: #233;
+    font-size: 15px;
+    padding: 9px 7px;
+  }
+  .transactions-card td {
+    padding: 9px 7px; text-align: center;
+  }
+  .transactions-card tr:nth-child(even) { background: #f8fafe; }
+  @media (max-width: 950px) {
+    .top-row { flex-direction: column; align-items: center; gap:20px;}
+    .summary-card, .holdings-card { max-width:94vw;}
+    .transactions-card { max-width:98vw;}
+  }
+</style>

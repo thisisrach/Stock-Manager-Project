@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Stocks</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+
+    /* Header/Navbar styling */
+    .navbar {
+      width: 100%;
+      background: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 28px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+    }
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .navbar-left img {
+      height: 28px;
+    }
+    .navbar-title {
+      font-weight: 600;
+      font-size: 18px;
+      color: #2c3e50;
+    }
+    .navbar-links {
+      display: flex;
+      gap: 22px;
+      align-items: center;
+    }
+    .navbar-links a {
+      text-decoration: none;
+      font-weight: 500;
+      color: #2c3e50;
+    }
+    .navbar-links a:hover {
+      color: #667eea;
+    }
+    .navbar-user {
+      font-weight: 500;
+      color: #444;
+    }
+
+    /* Page container */
+    .container {
+      width: 100%;
+      max-width: 950px;
+      padding: 38px 32px 24px 32px;
+      border-radius: 18px;
+      background: #fff;
+      margin: 40px auto;
+      box-shadow: 0 7px 30px rgba(0,0,0,0.13);
+      min-height: 670px;
+      animation: fadeIn 0.6s cubic-bezier(.46,.03,.52,.96);
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      font-size: 2.5em;
+      font-weight: 700;
+      margin-bottom: 32px;
+      letter-spacing: .5px;
+    }
+
+    /* Buttons */
+    .action-buttons {
+      display: flex;
+      gap: 19px;
+      margin-bottom: 25px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .oj-button {
+      padding: 10px 22px;
+      border: none;
+      border-radius: 9px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 17px;
+      margin-right: 8px;
+      transition: all 0.17s;
+    }
+    .oj-button-primary { background: linear-gradient(135deg,#667eea,#764ba2); color:#fff;}
+    .oj-button-primary:hover { background: linear-gradient(135deg,#5a67d8,#6b46c1);}
+    .oj-button-danger { background: #e74c3c; color:#fff;}
+    .oj-button-danger:hover { background: #c0392b;}
+    .oj-button-info { background: #3498db; color:#fff;}
+    .oj-button-info:hover { background:#2980b9;}
+    .oj-button-outlined-chrome {
+      background: #f0f3f8; border: 1px solid #bfc5dc; color:#444;
+    }
+    .oj-button-outlined-chrome:hover { background:#e2e2ef ; }
+    .oj-button-success { background: #27ae60; color:#fff;}
+    .oj-button-warning { background: #f39c12; color:#fff;}
+
+
+    /* Forms */
+    .form-block {
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto 29px auto;
+      padding: 26px 34px 24px 34px;
+      border-radius: 13px;
+      background: #f7f7fa;
+      box-shadow: 0 4px 13px #cdcded2a;
+    }
+    .form-block h2 { margin-bottom: 18px; text-align:center;}
+    label { display: block; margin-bottom:11px; font-weight:600; color: #444; }
+    input {
+      width: 100%; padding: 11px;
+      border-radius: 7px; border: 1.3px solid #ccc;
+      margin-bottom: 14px;
+      background: #fff;
+      font-size: 1em;
+      transition: border .19s; box-sizing: border-box;
+    }
+    input:focus { border-color: #667eea; outline: none;}
+
+    /* Overlay for Buy/Sell popup */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* Popup Box */
+.modal-box {
+  background: #fff;
+  padding: 28px 34px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  width: 95%;
+  max-width: 420px;
+  text-align: center;
+}
+.modal-box h2 {
+  margin-bottom: 18px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+    /* Table */
+    table { width: 100%; border-collapse: collapse; margin-top:15px; font-size: 15.5px;}
+    th, td { padding:10px 10px; text-align: center; border-bottom: 1px solid #deeafb;}
+    th { background:#2c3e50; color:#fff; font-size: 16px;}
+    tr:nth-child(even) { background: #f0f4fa; }
+
+    /* Reports */
+    .modal-report {
+      margin: 36px auto 0 auto;
+      width: 95%; max-width: 700px;
+      min-height: 240px;
+      border-radius: 18px;
+      background: #f8fafd;
+      box-shadow: 0 14px 40px #00000020;
+      padding: 32px 36px 22px 36px;
+      text-align: left;
+    }
+    .modal-report h2 {
+      display: flex; align-items: center; justify-content: space-between;
+      color: #2c3e50;
+      font-size: 25px;
+      margin-bottom: 22px;
+      font-weight: 700;
+    }
+    .modal-report .oj-button-danger {
+      font-size: 16px; padding:11px 20px;
+    }
+    .summary-field { margin:15px 0 9px 0; font-size: 1.15em;}
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+
+
+<!-- Main Page Container -->
+<div class="container">
+  <h1>Stocks Page</h1>
+
+  <!-- LIST -->
+  <!-- ko if: mode() === "list" -->
+    <div class="action-buttons">
+      <button class="oj-button oj-button-primary" data-bind="visible: isAdmin, click: showAddStockForm">➕ Add Stock</button>
+      <button class="oj-button oj-button-outlined-chrome" data-bind="click: listStock">📋 List Stocks</button>
+      <button class="oj-button oj-button-info" data-bind="click: showStockReports">📊 Show Reports</button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th><th>Name</th><th>Listing Price</th><th>Current Price</th>
+          <th>Quantity</th><th>Listing Date</th><th>Exchange</th><th>Status</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody data-bind="foreach: stockList">
+        <tr>
+          <td data-bind="text: stockId"></td>
+          <td data-bind="text: stockName"></td>
+          <td data-bind="text: listingPrice"></td>
+          <td data-bind="text: currentPrice"></td>
+          <td data-bind="text: availableQuantity"></td>
+          <td data-bind="text: listingDate ? listingDate.split('-').reverse().join('-') : ''"></td>
+          <td data-bind="text: exchange"></td>
+          <td data-bind="text: status"></td>
+          <td>
+            
+            <button class="oj-button oj-button-outlined-chrome" data-bind="visible: $parent.isAdmin, click: $parent.startUpdateStockRow">✏️ Update</button>
+            <button class="oj-button oj-button-danger" data-bind="visible: $parent.isAdmin, click: $parent.deleteStockRow">🗑 Delete</button>
+            <button class="oj-button oj-button-success" data-bind="visible: $parent.isCustomer, click: function(){ $parent.openBuy($data); }">Buy</button>
+            <button class="oj-button oj-button-warning" data-bind="visible: $parent.isCustomer, click: function(){ $parent.openSell($data); }">Sell</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  <!-- /ko -->
+
+  <!-- ADD -->
+  <!-- ko if: mode() === "add" -->
+    <div class="form-block">
+      <h2 style="color:#27ae60;">Add Stock</h2>
+      <form data-bind="submit: addStock">
+        <label>Name <input type="text" data-bind="value: newStockName" required></label>
+        <label>Listing Price <input type="number" step="0.01" data-bind="value: newListingPrice" required></label>
+        <label>Current Price <input type="number" step="0.01" data-bind="value: newCurrentPrice" required></label>
+        <label>Available Quantity <input type="number" data-bind="value: newAvailableQuantity" required></label>
+        <label>Listing Date <input type="date" data-bind="value: newListingDate" required></label>
+        <label>Exchange <input type="text" data-bind="value: newExchange" required></label>
+        <label>Status <input type="text" data-bind="value: newStatus" required></label>
+        <div style="display:flex; justify-content:center; gap:15px; margin-top:12px;">
+          <button type="submit" class="oj-button oj-button-primary">💾 Save</button>
+          <button type="button" class="oj-button oj-button-danger" data-bind="click: listStock">❌ Cancel</button>
+        </div>
+      </form>
+    </div>
+  <!-- /ko -->
+
+  <!-- EDIT -->
+  <!-- ko if: mode() === "edit" -->
+    <div class="form-block" style="background:#fff3cd;">
+      <h2 style="color:#856404;">Update Stock</h2>
+      <form data-bind="submit: updateStock">
+        <label>Name <input type="text" data-bind="value: newStockName" required></label>
+        <label>Listing Price <input type="number" step="0.01" data-bind="value: newListingPrice" required></label>
+        <label>Current Price <input type="number" step="0.01" data-bind="value: newCurrentPrice" required></label>
+        <label>Available Quantity <input type="number" data-bind="value: newAvailableQuantity" required></label>
+        <label>Listing Date <input type="date" data-bind="value: newListingDate" required></label>
+        <label>Exchange <input type="text" data-bind="value: newExchange" required></label>
+        <label>Status <input type="text" data-bind="value: newStatus" required></label>
+        <div style="display:flex; justify-content:center; gap:15px; margin-top:12px;">
+          <button type="submit" class="oj-button oj-button-primary">🔄 Update</button>
+          <button type="button" class="oj-button oj-button-danger" data-bind="click: listStock">❌ Cancel</button>
+        </div>
+      </form>
+    </div>
+  <!-- /ko -->
+
+  <!-- BUY FORM -->
+<!-- ko if: showBuyForm -->
+<div class="modal-overlay">
+  <div class="modal-box">
+    <h2 style="color:#27ae60;">Buy Stock</h2>
+    <p><strong>Stock:</strong> <span data-bind="text: selectedStock() ? selectedStock().stockName : ''"></span></p>
+    <p><strong>Available:</strong> <span data-bind="text: selectedStock() ? selectedStock().availableQuantity : ''"></span></p>
+    <label>Quantity
+      <input type="number" min="1" data-bind="value: txnQuantity">
+    </label>
+    <div style="margin-top:15px; display:flex; justify-content:center; gap:15px;">
+      <button class="oj-button oj-button-success" data-bind="click: buyStock">✅ Confirm Buy</button>
+      <button class="oj-button oj-button-danger" data-bind="click: closeForms">❌ Cancel</button>
+    </div>
+  </div>
+</div>
+<!-- /ko -->
+
+<!-- SELL FORM -->
+<!-- ko if: showSellForm -->
+<div class="modal-overlay">
+  <div class="modal-box">
+    <h2 style="color:#f39c12;">Sell Stock</h2>
+    <p><strong>Stock:</strong> <span data-bind="text: selectedStock() ? selectedStock().stockName : ''"></span></p>
+    <label>Quantity
+      <input type="number" min="1" data-bind="value: txnQuantity">
+    </label>
+    <div style="margin-top:15px; display:flex; justify-content:center; gap:15px;">
+      <button class="oj-button oj-button-warning" data-bind="click: sellStock">📤 Confirm Sell</button>
+      <button class="oj-button oj-button-danger" data-bind="click: closeForms">❌ Cancel</button>
+    </div>
+  </div>
+</div>
+<!-- /ko -->
+
+
+
+  <!-- REPORT -->
+  <!-- ko if: mode() === "report" -->
+    <div class="modal-report">
+      <h2>
+        Stocks Reports
+        <button style="float:right;" class="oj-button oj-button-danger" data-bind="click: listStock">Close</button>
+      </h2>
+      <div class="summary-field"><strong>Most Transacted Stock:</strong> <span data-bind="text: mostTransacted"></span></div>
+      <div class="summary-field"><strong>Least Transacted Stock:</strong> <span data-bind="text: leastTransacted"></span></div>
+      <div class="summary-field">
+        <strong>Stock with Highest Price:</strong>
+        <span data-bind="text: highestPriceStock() ? highestPriceStock().stockName : '-'"></span>
+        (<span data-bind="text: highestPriceStock() ? highestPriceStock().currentPrice : '-'"></span>)
+      </div>
+    </div>
+  <!-- /ko -->
+</div>
+</body>
+</html>
