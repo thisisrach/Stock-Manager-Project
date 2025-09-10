@@ -22,11 +22,11 @@ The system provides functionalities for **stock management, customer management,
 **Sell Stocks**: Customers can sell purchased stocks. Adjusts inventory and records the sale in the customer’s history.  
 
 
-## 💾 Data Persistence
+## Data Persistence
 The application integrates with an **Oracle Database** to store stock, customer, transaction and users data persistently.  
 This ensures data integrity and availability across sessions.
 
-## 🛠️ Technologies Used
+## Technologies Used
 **Programming Language**: Java 17  
 **Platform**: Java EE 7, Spring Boot 3.5.5  
 **Server**: Apache Tomcat 10  
